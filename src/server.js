@@ -5,6 +5,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { v4 : uuidv4} = require('uuid');
 
+// let's use the package express()
+const app = express();
+
+// make a port to listen to requests
+const port = 3000;
+
+app.set('view engine', 'ejs'); // using EJS for views (templates)
+app.use(bodyParser.urlencoded({ extended: true})); // using body-parser to parse data
+app.use(express.static('public')); // server static files from 'public' folder (i.e. CSS, JS, etc/)
+
 // create an array of Objects for receipts
 
 const receipts = [
@@ -24,9 +34,6 @@ const receipts = [
     }
 ];
 
-// let's use the package express()
-const app = express();
-
-// make a port to listen to requests
-const port = 3000;
-
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`)
+})
