@@ -34,6 +34,30 @@ const receipts = [
     }
 ];
 
+// Create (POST)
+app.post('/receipts', (req, res) => {
+    const newReceipt = {
+        id: uuidv4(),
+        name: req.body.name,
+        date: new Date(req.body.date),
+        categories: req.body.categories ? req.body.categories.split(',') : [], // handle categories
+        overallCost: parseFloat(req.body.overallCost) // parse cost into float
+    };
+    receipts.push(newReceipt);
+    res.redirect('/');
+});
+
+// Read (GET)
+app.get('/', (req, res) => {
+    res.render('index', { receipts: receipts })
+});
+
+// Update (PUT)
+app.put('/receipts/:id', (req, res) => {
+    const id = req.params.id;
+
+});
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)
 })
