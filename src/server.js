@@ -57,9 +57,21 @@ app.post('/api/v1/', (req, res) => {
 });
 
 // Update (PUT)
-app.put('/receipts/:id', (req, res) => {
+app.put('/api/v1/:id', (req, res) => {
     const id = req.params.id;
+    const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
+    // IF CANNOT find the 
+    if (receiptIndex === -1){
+        return res.status(404).json({
+            error: "Receipt not found"
+        })
+    };
 
+    receipts[receiptIndex] = {
+        ...receipts[receiptIndex],
+        ...req.body
+    };
+    res.json(receipts[receiptIndex]);
 });
 
 app.listen(port, () => {
