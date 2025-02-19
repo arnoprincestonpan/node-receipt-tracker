@@ -39,7 +39,7 @@ const receipts = [];
 /* API v1 Routes */
 
 // Read (GET)
-app.get('/api/v1/', (req, res) => {
+app.get('/api/v1/', async (req, res) => {
     res.json(receipts);
 });
 
@@ -92,7 +92,7 @@ app.post('/api/v1/', async (req, res, next) => {
 });
 
 // Update (PUT)
-app.put('/api/v1/:id', (req, res) => {
+app.put('/api/v1/:id', async (req, res) => {
     const id = req.params.id;
     const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
     // IF CANNOT find the id
@@ -110,18 +110,22 @@ app.put('/api/v1/:id', (req, res) => {
 });
 
 // Delete (DELETE)
-app.delete('/api/v1/:id', (req, res) => {
-    const id = req.params.id;
-    const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
-    // If CANNOT find the id
-    if(receiptIndex === -1){
-        return res.status(404).json({
-            error: "Receipt not found"
-        });
-    };
-
-    receipts.pop(receiptIndex);
-    res.status(200).json({ message: "Receipt deleted successfully."});
+app.delete('/api/v1/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
+        // If CANNOT find the id
+        if(receiptIndex === -1){
+            return res.status(404).json({
+                error: "Receipt not found"
+            });
+        };
+    
+        receipts.pop(receiptIndex);
+        res.status(200).json({ message: "Receipt deleted successfully."});
+    } catch (error){
+        next(error);
+    }
 });
 
 // Error Handler
