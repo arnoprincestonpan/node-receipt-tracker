@@ -45,12 +45,24 @@ app.get('/api/v1/', (req, res) => {
 
 // Create (POST)
 app.post('/api/v1/', (req, res) => {
+    const { name, date, categories, overallCost } = req.body;
+
+    if(!name || !date || !categories || !overallCost){
+        return res.status(400).json({
+            error: `Missing Required Fields
+            name: ${name}
+            date: ${date}
+            categories: ${categories}
+            overallCost: ${overallCost}`
+        });
+    }
+
     const newReceipt = {
         id: uuidv4(),
-        name: req.body.name,
-        date: new Date(req.body.date),
-        categories: req.body.categories || [], 
-        overallCost: parseFloat(req.body.overallCost),
+        name: name,
+        date: new Date(date),
+        categories: categories || [], 
+        overallCost: parseFloat(overallCost),
     };
     receipts.push(newReceipt);
     res.status(201).json(newReceipt); 
