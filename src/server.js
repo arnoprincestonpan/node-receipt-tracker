@@ -47,14 +47,32 @@ app.get('/api/v1/', (req, res) => {
 app.post('/api/v1/', (req, res) => {
     const { name, date, categories, overallCost } = req.body;
 
-    if(!name || !date || !categories || !overallCost){
+    const errors = [];
+
+    if(!name || name.trim() === ""){
+        errors.push(`Name is required. Name: ${name}`);
+    }
+
+    if(!date){
+        errors.push(`Date is required. Date: ${date}`);
+    } else if(isNaN(new Date(date))){
+        errors.push(`Invalid date format. Date: ${date}`);
+    }
+
+    if(!categories || !Array.isArray(categories) || categories.length === 0){
+        errors.push(`Categories are required. Categories Array must not be empty. Categories: ${categories}`)
+    }else if (categories.some(category => typeof category !== "string" || category.trim() === 0)){
+        errors.push(`All categories must be non-empty strings. Categories: ${categories}`);
+    }
+    
+    if(overallCost === undefined || overallCost === null || isNaN(parseFloat(overallCost))){
+        errors.push(`OverallCost is required and must be a number. OverallCost: ${overallCost}`);
+    }
+
+    if(errors.length > 0){
         return res.status(400).json({
-            error: `Missing Required Fields
-            name: ${name}
-            date: ${date}
-            categories: ${categories}
-            overallCost: ${overallCost}`
-        });
+            errors: errors
+        })
     }
 
     const newReceipt = {
