@@ -44,46 +44,51 @@ app.get('/api/v1/', (req, res) => {
 });
 
 // Create (POST)
-app.post('/api/v1/', (req, res) => {
-    const { name, date, categories, overallCost } = req.body;
+app.post('/api/v1/', async (req, res, next) => {
+    try {
+        const { name, date, categories, overallCost } = req.body;
 
-    const errors = [];
-
-    if(!name || name.trim() === ""){
-        errors.push(`Name is required. Name: ${name}`);
-    }
-
-    if(!date){
-        errors.push(`Date is required. Date: ${date}`);
-    } else if(isNaN(new Date(date))){
-        errors.push(`Invalid date format. Date: ${date}`);
-    }
-
-    if(!categories || !Array.isArray(categories) || categories.length === 0){
-        errors.push(`Categories are required. Categories Array must not be empty. Categories: ${categories}`)
-    }else if (categories.some(category => typeof category !== "string" || category.trim() === 0)){
-        errors.push(`All categories must be non-empty strings. Categories: ${categories}`);
-    }
+        const errors = [];
     
-    if(overallCost === undefined || overallCost === null || isNaN(parseFloat(overallCost))){
-        errors.push(`OverallCost is required and must be a number. OverallCost: ${overallCost}`);
+        if(!name || name.trim() === ""){
+            errors.push(`Name is required. Name: ${name}`);
+        }
+    
+        if(!date){
+            errors.push(`Date is required. Date: ${date}`);
+        } else if(isNaN(new Date(date))){
+            errors.push(`Invalid date format. Date: ${date}`);
+        }
+    
+        if(!categories || !Array.isArray(categories) || categories.length === 0){
+            errors.push(`Categories are required. Categories Array must not be empty. Categories: ${categories}`)
+        }else if (categories.some(category => typeof category !== "string" || category.trim() === "")){
+            errors.push(`All categories must be non-empty strings. Categories: ${categories}`);
+        }
+        
+        if(overallCost === undefined || overallCost === null || isNaN(parseFloat(overallCost))){
+            errors.push(`OverallCost is required and must be a number. OverallCost: ${overallCost}`);
+        }
+    
+        if(errors.length > 0){
+            const validationError = new Error("Validation Failed.");
+            validationError.status = 400;
+            validationError.errors = errors;
+            throw validationError;
+        }
+    
+        const newReceipt = {
+            id: uuidv4(),
+            name: name,
+            date: new Date(date),
+            categories: categories.map(category => category.trim()), 
+            overallCost: parseFloat(overallCost),
+        };
+        receipts.push(newReceipt);
+        res.status(201).json(newReceipt); 
+    } catch (error) {
+        next(error);
     }
-
-    if(errors.length > 0){
-        return res.status(400).json({
-            errors: errors
-        })
-    }
-
-    const newReceipt = {
-        id: uuidv4(),
-        name: name,
-        date: new Date(date),
-        categories: categories.map(cat => cat.trim()), 
-        overallCost: parseFloat(overallCost),
-    };
-    receipts.push(newReceipt);
-    res.status(201).json(newReceipt); 
 });
 
 // Update (PUT)
@@ -92,7 +97,7 @@ app.put('/api/v1/:id', (req, res) => {
     const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
     // IF CANNOT find the id
     if (receiptIndex === -1){
-        return res.status(404).json({
+        return err.status(404).json({
             error: "Receipt not found"
         })
     };
@@ -118,6 +123,23 @@ app.delete('/api/v1/:id', (req, res) => {
     receipts.pop(receiptIndex);
     res.status(200).json({ message: "Receipt deleted successfully."});
 });
+
+// Error Handler
+const errorHandler = (err, req, res, next) =>{
+    console.error(err.stack);
+    
+    if(err.status === 400 && err.errors){
+        return res.status(400).json({
+            errors: err.errors
+        })
+    }
+
+    res.status(err.status || 500).json({
+        error: err.message || `Internal Server Error.`
+    })
+}
+
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)
