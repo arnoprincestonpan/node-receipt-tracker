@@ -97,7 +97,7 @@ app.put('/api/v1/:id', async (req, res) => {
     const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
     // IF CANNOT find the id
     if (receiptIndex === -1){
-        return err.status(404).json({
+        return res.status(404).json({
             error: "Receipt not found"
         })
     };
