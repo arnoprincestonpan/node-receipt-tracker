@@ -60,7 +60,7 @@ app.post('/api/v1/', (req, res) => {
 app.put('/api/v1/:id', (req, res) => {
     const id = req.params.id;
     const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
-    // IF CANNOT find the 
+    // IF CANNOT find the id
     if (receiptIndex === -1){
         return res.status(404).json({
             error: "Receipt not found"
@@ -72,6 +72,21 @@ app.put('/api/v1/:id', (req, res) => {
         ...req.body
     };
     res.json(receipts[receiptIndex]);
+});
+
+// Delete (DELETE)
+app.delete('/api/v1/:id', (req, res) => {
+    const id = req.params.id;
+    const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
+    // If CANNOT find the id
+    if(receiptIndex === -1){
+        return res.status(404).json({
+            error: "Receipt not found"
+        });
+    };
+
+    receipts.pop(receiptIndex);
+    res.status(200).json({ message: "Receipt deleted successfully."});
 });
 
 app.listen(port, () => {
