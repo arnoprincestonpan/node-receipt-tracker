@@ -79,7 +79,7 @@ app.post('/api/v1/', (req, res) => {
         id: uuidv4(),
         name: name,
         date: new Date(date),
-        categories: categories || [], 
+        categories: categories.map(cat => cat.trim()), 
         overallCost: parseFloat(overallCost),
     };
     receipts.push(newReceipt);
