@@ -115,19 +115,22 @@ app.put('/api/v1/:id', async (req, res) => {
 });
 
 // Delete (DELETE)
-app.delete('/api/v1/:id', async (req, res) => {
+app.delete('/api/v1/:id', async (req, res, next) => {
     try {
         const id = req.params.id;
         const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
+
+        console.log("Before " + receiptIndex);
         // If CANNOT find the id
         if(receiptIndex === -1){
-            return res.status(404).json({
-                error: "Receipt not found"
-            });
+            console.log(receiptIndex);
+            const notFoundError = new Error("Receipt not found");
+            notFoundError.status = 404;
+            throw notFoundError;
         };
     
-        receipts.pop(receiptIndex);
-        res.status(200).json({ message: "Receipt deleted successfully."});
+        receipts.splice(receiptIndex, 1); // delete one at index 
+        res.status(204).send();
     } catch (error){
         next(error);
     }
@@ -148,16 +151,17 @@ const errorHandler = (err, req, res, next) =>{
     })
 }
 
-app.use(errorHandler);
-
-/* Regular Access from EJS */
+/* Regular Access from EJS or frontend */
 app.get('/', async (req, res, next) => {
     try {
-        res.render('index', {receipts: receipts}); // Render the view
+        console.log(receipts);
+        res.render('index', {receipts: receipts}); // Render the view, go to index.ejs and pass array of objects receipts into receipts 
     } catch (error) {
         next(error);
     }
 });
+
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)

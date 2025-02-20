@@ -8,11 +8,11 @@
 <body>
     <h1>Receipts</h1>
     <ul>
-        <% receipts.forEach(receipt => { %>)
+        <% receipts.forEach(receipt => { %>
             <li>
                 <%= receipt.name %> - <%= receipt.overallCost %>
-                <form action="/api/v1/<%= receipt.id%>" method="POST">
-                    <input type="hidden" name="_method" value="DELETE"/>
+                <form action="/api/v1/<%= receipt.id %>" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
                     <button type="submit">Delete</button>
                 </form>
             </li>
