@@ -15,6 +15,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); // using body-parser to parse data
 app.use(express.static('public')); // server static files from 'public' folder (i.e. CSS, JS, etc/)
 
+// use View Engine
+const path = require('path'); // use path package from node.js
+app.set('view engine', 'ejs'); // set view engine as ejs
+app.set('views', path.join(__dirname, "..", 'views')); // set directory views
+
 // create an array of Objects for receipts
 
 const receipts = [];
@@ -144,6 +149,15 @@ const errorHandler = (err, req, res, next) =>{
 }
 
 app.use(errorHandler);
+
+/* Regular Access from EJS */
+app.get('/', async (req, res, next) => {
+    try {
+        res.render('index', {receipts: receipts}); // Render the view
+    } catch (error) {
+        next(error);
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)
