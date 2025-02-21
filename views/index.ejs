@@ -8,20 +8,28 @@
 <body>
     <h1>Receipts</h1>
     <div>
-        <%%>
+        <% receipts.forEach(receipt => {%>
         <div>
-            <h3>Receipt ID</h3>
-            <h2>Receipt Date | Receipt Name</h2>
-            <h3>Overall Cost: Overall Cost</h3>
+            <h5><%= receipt.id %></h5>
+            <h2><%= receipt.name %> | <%= receipt.date.toLocaleDateString("en-US") %></h2>
+            <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
             <h4>Categories:</h4>
-            <ul></ul>
+            <ul>
+                <% if (receipt.categories && receipt.categories.length > 0){ %>
+                    <% receipt.categories.map(category => { %>
+                        <li><%= category %></li>
+                    <% }); %>
+                <% } else { %>
+                    <li>No categories</li>
+                <% } %>
+            </ul>
             <form>
                 <input type="hidden" name="_method" value="DELETE"/>
                 <button type="submit">Delete</button>
-                <a herf="/edit/">Edit</a>
+                <a href="/edit/<%= receipt.id %>">Edit</a>
             </form>
         </div>
-        <% %>
+        <% }); %>
     </div>
 </body>
 </html>
