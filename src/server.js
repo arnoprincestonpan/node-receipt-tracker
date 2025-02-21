@@ -22,24 +22,24 @@ app.set('views', path.join(__dirname, "..", 'views')); // set directory views
 
 // create an array of Objects for receipts
 
-const receipts = [];
+// const receipts = [];
 
-// const receipts = [
-//     {
-//         id: uuidv4(), // unique ID
-//         name: "Groceries",
-//         date: new Date(), // latest date and time
-//         categories: ['food'],
-//         overallCost: 55.75
-//     },
-//     {
-//         id: uuidv4(),
-//         name: "Gas",
-//         date: new Date(),
-//         categories: ["transporation"],
-//         overallCost: 40.00
-//     }
-// ];
+const receipts = [
+    {
+        id: uuidv4(), // unique ID
+        name: "Groceries",
+        date: new Date(), // latest date and time
+        categories: ['food'],
+        overallCost: 55.75
+    },
+    {
+        id: uuidv4(),
+        name: "Gas",
+        date: new Date(),
+        categories: ["transporation"],
+        overallCost: 40.00
+    }
+];
 
 /* API v1 Routes */
 

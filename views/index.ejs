@@ -7,16 +7,21 @@
 </head>
 <body>
     <h1>Receipts</h1>
-    <ul>
-        <% receipts.forEach(receipt => { %>
-            <li>
-                <%= receipt.name %> - <%= receipt.overallCost %>
-                <form action="/api/v1/<%= receipt.id %>" method="POST">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        <% }); %>
-    </ul>
+    <div>
+        <%%>
+        <div>
+            <h3>Receipt ID</h3>
+            <h2>Receipt Date | Receipt Name</h2>
+            <h3>Overall Cost: Overall Cost</h3>
+            <h4>Categories:</h4>
+            <ul></ul>
+            <form>
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit">Delete</button>
+                <a herf="/edit/">Edit</a>
+            </form>
+        </div>
+        <% %>
+    </div>
 </body>
 </html>
