@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Edit
+    </title>
+</head>
+<body>
+    <h1>Edit Receipt</h1>
+    <form action="/api/v1/<%= receipt.id %>" method="POST">
+        <input type="hidden" name="_method" value="PUT"/>
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="<%= receipt.name %>"/>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" value="<%= receipt.date %>"/>
+
+        <label for="overallCost">Overall Cost:</label>
+        <input type="number" id="overallCost" name="overallCost" value="<%= receipt.overallCost %>"/>
+
+        <label for="categories">Categories:</label>
+        <input type="text" id="categories" name="categories" value="<%= receipt.categories %>"/>
+
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

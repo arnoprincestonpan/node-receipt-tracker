@@ -4,6 +4,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { v4 : uuidv4} = require('uuid');
+const methodOverride = require('method-override');
 
 // let's use the package express()
 const app = express();
@@ -13,6 +14,7 @@ const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); // using body-parser to parse data
+app.use(methodOverride('_method'));
 app.use(express.static('public')); // server static files from 'public' folder (i.e. CSS, JS, etc/)
 
 // use View Engine
@@ -29,7 +31,7 @@ const receipts = [
         id: uuidv4(), // unique ID
         name: "Groceries",
         date: new Date(), // latest date and time
-        categories: ['food'],
+        categories: ['food', 'snacks'],
         overallCost: 55.75
     },
     {
@@ -102,9 +104,9 @@ app.put('/api/v1/:id', async (req, res) => {
     const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
     // IF CANNOT find the id
     if (receiptIndex === -1){
-        return res.status(404).json({
-            error: "Receipt not found"
-        })
+        const notFoundError = new Error("Receipt not Found.");
+        notFoundError.status = 404;
+        throw notFoundError;
     };
 
     receipts[receiptIndex] = {
@@ -136,6 +138,34 @@ app.delete('/api/v1/:id', async (req, res, next) => {
     }
 });
 
+/* Regular Access from EJS or frontend */
+app.get('/', async (req, res, next) => {
+    try {
+        console.log(receipts);
+        res.render('index', {receipts: receipts}); // Render the view, go to index.ejs and pass array of objects receipts into receipts 
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.get('/edit/:id', async(req,res, next) => {
+    try{
+        const receiptId = req.params.id;
+
+        const receipt = receipts.find(receipt => receipt.id === receiptId);
+    
+        if(!receipt){
+            const notFoundError = new Error("Receipt not Found.");
+            notFoundError.status = 404;
+            throw notFoundError;
+        }
+
+        res.render('edit', { receipt: receipt})
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Error Handler
 const errorHandler = (err, req, res, next) =>{
     console.error(err.stack);
@@ -150,16 +180,6 @@ const errorHandler = (err, req, res, next) =>{
         error: err.message || `Internal Server Error.`
     })
 }
-
-/* Regular Access from EJS or frontend */
-app.get('/', async (req, res, next) => {
-    try {
-        console.log(receipts);
-        res.render('index', {receipts: receipts}); // Render the view, go to index.ejs and pass array of objects receipts into receipts 
-    } catch (error) {
-        next(error);
-    }
-});
 
 app.use(errorHandler);
 
