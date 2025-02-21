@@ -10,8 +10,8 @@
     <div>
         <% receipts.forEach(receipt => {%>
         <div>
-            <h5><%= receipt.id %></h5>
             <h2><%= receipt.name %> | <%= receipt.date.toLocaleDateString("en-US") %></h2>
+            <h5><%= receipt.id %></h5>
             <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
             <h4>Categories:</h4>
             <ul>
@@ -23,11 +23,11 @@
                     <li>No categories</li>
                 <% } %>
             </ul>
-            <form>
+            <form method="POST" action="/api/v1/<%= receipt.id %>?_method=DELETE">
                 <input type="hidden" name="_method" value="DELETE"/>
                 <button type="submit">Delete</button>
-                <a href="/edit/<%= receipt.id %>">Edit</a>
             </form>
+            <a href="/edit/<%= receipt.id %>">Edit</a>
         </div>
         <% }); %>
     </div>
