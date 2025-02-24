@@ -99,21 +99,27 @@ app.post('/api/v1/', async (req, res, next) => {
 });
 
 // Update (PUT)
-app.put('/api/v1/:id', async (req, res) => {
-    const id = req.params.id;
-    const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
-    // IF CANNOT find the id
-    if (receiptIndex === -1){
-        const notFoundError = new Error("Receipt not Found.");
-        notFoundError.status = 404;
-        throw notFoundError;
-    };
-
-    receipts[receiptIndex] = {
-        ...receipts[receiptIndex],
-        ...req.body
-    };
-    res.json(receipts[receiptIndex]);
+app.put('/api/v1/:id', async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const receiptIndex = receipts.findIndex(receipt => receipt.id === id);
+        
+        // IF CANNOT find the id
+        if (receiptIndex === -1){
+            const notFoundError = new Error("Receipt not Found.");
+            notFoundError.status = 404;
+            throw notFoundError;
+        };
+    
+        receipts[receiptIndex] = {
+            ...receipts[receiptIndex],
+            ...req.body,
+            categories: req.body.categories.split(',').map(category => category.trim());
+        };
+        res.json(receipts[receiptIndex]);
+    } catch (error){
+        next(error);
+    }
 });
 
 // Delete (DELETE)
