@@ -114,7 +114,7 @@ app.put('/api/v1/:id', async (req, res, next) => {
         receipts[receiptIndex] = {
             ...receipts[receiptIndex],
             ...req.body,
-            categories: req.body.categories.split(',').map(category => category.trim());
+            categories: req.body.categories.split(',').map(category => category.trim())
         };
         res.json(receipts[receiptIndex]);
     } catch (error){
@@ -138,7 +138,7 @@ app.delete('/api/v1/:id', async (req, res, next) => {
         };
     
         receipts.splice(receiptIndex, 1); // delete one at index 
-        res.status(200).redirect('/');
+        res.status(204).redirect('/');
     } catch (error){
         next(error);
     }
