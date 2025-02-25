@@ -112,7 +112,8 @@ app.put('/api/v1/:id', async (req, res, next) => {
         };
 
         const overallCost = req.body.overallCost ? parseFloat(req.body.overallCost) : req.body.overallCost;
-    
+        const categories = req.body.categories ? req.body.categories.split(',').map(category => category.trim()) : [] 
+
         receipts[receiptIndex] = {
             ...receipts[receiptIndex],
             ...req.body,
@@ -168,7 +169,7 @@ app.post('/api/v1/sample', async (req, res, next) => {
                     overallCost: 40
                 },
         );
-        res.status(201).json(receipts); 
+        res.status(201).redirect('/'); 
     } catch (error) {
         next(error);
     }

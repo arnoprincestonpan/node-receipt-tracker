@@ -4,32 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt Tracker</title>
+    <style>
+        body {
+            background-color: blanchedalmond;
+            margin: auto;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: row;
+
+            justify-content: center;
+            margin: auto;
+        }
+
+        .receiptsContainer {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid black;
+            margin-inline: 1rem;
+            padding: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Receipts</h1>
-    <div>
-        <% receipts.forEach(receipt => {%>
-        <div>
-            <h2><%= receipt.name %> | <%= receipt.date %></h2>
-            <h5><%= receipt.id %></h5>
-            <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
-            <h4>Categories:</h4>
-            <ul>
-                <% if (receipt.categories && receipt.categories.length > 0){ %>
-                    <% receipt.categories.map(category => { %>
-                        <li><%= category %></li>
-                    <% }); %>
-                <% } else { %>
-                    <li>No categories</li>
-                <% } %>
-            </ul>
-            <form method="POST" action="/api/v1/<%= receipt.id %>?_method=DELETE">
-                <input type="hidden" name="_method" value="DELETE"/>
-                <button type="submit">Delete</button>
+    <h1 class="title">Receipts</h1>
+    <div class="receiptsContainer">
+        <% if (receipts && receipts.length > 0){ %>
+            <% receipts.forEach(receipt => {%>
+            <div>
+                <h2><%= receipt.name %> | <%= receipt.date.toLocaleString() %></h2>
+                <h5><%= receipt.id %></h5>
+                <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
+                <h4>Categories:</h4>
+                <ul>
+                    <% if (receipt.categories && receipt.categories.length > 0){ %>
+                        <% receipt.categories.map(category => { %>
+                            <li><%= category %></li>
+                        <% }); %>
+                    <% } else { %>
+                        <li>No categories</li>
+                    <% } %>
+                </ul>
+                <form method="POST" action="/api/v1/<%= receipt.id %>?_method=DELETE">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit">Delete</button>
+                </form>
+                <a href="/edit/<%= receipt.id %>">Edit</a>
+            </div>
+            <% }); %>
+        <% } else { %>
+            <p>No receipts available.</p>
+            <h2>Would you like to populate with sample data?</h2>
+            <form method="POST" action="/api/v1/sample?_method=POST">
+                <input type="hidden" name="_method" value="POST">
+                <button type="submit">Populate!</button>
             </form>
-            <a href="/edit/<%= receipt.id %>">Edit</a>
-        </div>
-        <% }); %>
+        <% } %>
     </div>
 </body>
 </html>
