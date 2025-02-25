@@ -10,7 +10,7 @@
     <div>
         <% receipts.forEach(receipt => {%>
         <div>
-            <h2><%= receipt.name %> | <%= receipt.date.toLocaleDateString("en-US") %></h2>
+            <h2><%= receipt.name %> | <%= receipt.date %></h2>
             <h5><%= receipt.id %></h5>
             <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
             <h4>Categories:</h4>

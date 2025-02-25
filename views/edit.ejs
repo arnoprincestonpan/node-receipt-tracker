@@ -9,8 +9,8 @@
 </head>
 <body>
     <h1>Edit Receipt</h1>
-    <form action="/api/v1/<%= receipt.id %>" method="POST">
-        <input type="hidden" name="_method" value="PUT"/>
+    <form action="/api/v1/<%= receipt.id %>?_method=PUT" method="POST">
+        <input type="hidden" name="_method" value="PUT" />
 
         <label for="name">Name</label>
         <input type="text" id="name" name="name" value="<%= receipt.name %>"/>

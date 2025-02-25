@@ -110,13 +110,17 @@ app.put('/api/v1/:id', async (req, res, next) => {
             notFoundError.status = 404;
             throw notFoundError;
         };
+
+        const overallCost = req.body.overallCost ? parseFloat(req.body.overallCost) : req.body.overallCost;
     
         receipts[receiptIndex] = {
             ...receipts[receiptIndex],
             ...req.body,
-            categories: req.body.categories.split(',').map(category => category.trim())
+            overallCost: overallCost
+            // categories: req.body.categories.split(',').map(category => category.trim())
         };
-        res.json(receipts[receiptIndex]);
+        // res.json(receipts[receiptIndex]);
+        res.redirect(`/edit/${id}`);
     } catch (error){
         next(error);
     }
