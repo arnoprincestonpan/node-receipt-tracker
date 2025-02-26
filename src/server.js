@@ -117,11 +117,13 @@ app.put('/api/v1/:id', async (req, res, next) => {
         receipts[receiptIndex] = {
             ...receipts[receiptIndex],
             ...req.body,
+            categories: categories,
             overallCost: overallCost
             // categories: req.body.categories.split(',').map(category => category.trim())
         };
         // res.json(receipts[receiptIndex]);
-        res.redirect(`/edit/${id}`);
+        // res.redirect(`/edit/${id}`);
+        res.redirect(`/`)
     } catch (error){
         next(error);
     }
