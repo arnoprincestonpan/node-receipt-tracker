@@ -6,25 +6,97 @@
     <title>
         Edit
     </title>
+    <style>
+        body {
+            background-color: blanchedalmond;
+            margin: auto;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: row;
+
+            justify-content: center;
+            margin: auto;
+        }
+
+        .editContainer {
+            display: flex;
+            flex-direction: column;
+
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .pushable{
+            margin-top: 2rem;
+
+            background: hsl(30, 99%, 35%);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+        }
+
+        .front{
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            background: hsl(30, 100%, 47%);
+            color: white;
+            transform: translateY(-6px);
+            text-transform: uppercase;
+            text-shadow: black 2px 2px 2px;
+        }
+
+        .pushable:active .front {
+            transform: translateY(-2px);
+        }
+
+        label {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        input {
+            border-radius: 1rem;
+            padding: 1rem;
+
+            font-size: 18px;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Edit Receipt</h1>
-    <form action="/api/v1/<%= receipt.id %>?_method=PUT" method="POST">
-        <input type="hidden" name="_method" value="PUT" />
+    <h1 class="title">Edit Receipt</h1>
 
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" value="<%= receipt.name %>"/>
-
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date" value="<%= receipt.date %>"/>
-
-        <label for="overallCost">Overall Cost:</label>
-        <input type="number" id="overallCost" name="overallCost" value="<%= receipt.overallCost %>"/>
-
-        <label for="categories">Categories:</label>
-        <input type="text" id="categories" name="categories" value="<%= receipt.categories %>"/>
-
-        <button type="submit">Update</button>
-    </form>
+        <form class="editContainer" action="/api/v1/<%= receipt.id %>?_method=PUT" method="POST">
+            <input type="hidden" name="_method" value="PUT" />
+    
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= receipt.name %>"/>
+    
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="<%= receipt.date %>"/>
+    
+            <label for="overallCost">Overall Cost:</label>
+            <input type="number" id="overallCost" name="overallCost" value="<%= receipt.overallCost %>" step="0.01"/>
+    
+            <label for="categories">Categories:</label>
+            <input type="text" id="categories" name="categories" value="<%= receipt.categories %>"/>
+            
+            <button class="pushable" type="submit">
+                <span class="front">
+                    Update
+                </span>
+            </button>
+        </form>
+    </div>
 </body>
 </html>
