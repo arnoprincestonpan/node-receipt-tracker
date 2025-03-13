@@ -53,7 +53,7 @@ app.get('/api/v1/', async (req, res) => {
 // Create (POST)
 app.post('/api/v1/', async (req, res, next) => {
     try {
-        const { name, date, categories, overallCost } = req.body;
+        const { name, date, categories : categoriesString, overallCost } = req.body;
 
         const errors = [];
     
@@ -66,8 +66,18 @@ app.post('/api/v1/', async (req, res, next) => {
         } else if(isNaN(new Date(date))){
             errors.push(`Invalid date format. Date: ${date}`);
         }
+
+        let categories = [];
+
+        if(categoriesString){
+            categories = categoriesString
+            .split(',')
+            .map(category => category.trim())
+            .filter(category => category !== "");
+        }
+
     
-        if(!categories || !Array.isArray(categories) || categories.length === 0){
+        if(!categories || categories.length === 0){
             errors.push(`Categories are required. Categories Array must not be empty. Categories: ${categories}`)
         }else if (categories.some(category => typeof category !== "string" || category.trim() === "")){
             errors.push(`All categories must be non-empty strings. Categories: ${categories}`);
