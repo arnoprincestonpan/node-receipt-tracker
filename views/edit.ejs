@@ -10,37 +10,41 @@
         body {
             background-color: blanchedalmond;
             margin: auto;
-            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            padding: 20px; /* add padding */
         }
-
+    
         .title {
             display: flex;
-            flex-direction: row;
-
             justify-content: center;
-            margin: auto;
+            margin: 20px auto;
+            font-size: 2.5em; /* increase font size */
         }
-
+    
         .editContainer {
             display: flex;
             flex-direction: column;
-
-            margin: auto;
+            width: 400px; /* Set a fixed width for the form */
+            margin: 2rem auto; /* Center the form */
             padding: 2rem;
+            border: 1px solid #ccc; /* Add a border */
+            border-radius: 8px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light background */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         }
-
-        .pushable{
+    
+        .pushable {
             margin-top: 2rem;
-
             background: hsl(30, 99%, 35%);
             border-radius: 12px;
             border: none;
             padding: 0;
             cursor: pointer;
             outline-offset: 4px;
+            align-self: center; /* Center the button */
         }
-
-        .front{
+    
+        .front {
             display: block;
             padding: 12px 42px;
             border-radius: 12px;
@@ -51,26 +55,33 @@
             text-transform: uppercase;
             text-shadow: black 2px 2px 2px;
         }
-
+    
         .pushable:active .front {
             transform: translateY(-2px);
         }
-
+    
         label {
             margin-top: 1rem;
-            margin-bottom: 1rem;
-
+            margin-bottom: 0.5rem; /* Reduce bottom margin */
             text-transform: uppercase;
             font-weight: 600;
+            font-size: 0.9em; /* Smaller label font */
         }
-
+    
         input {
-            border-radius: 1rem;
-            padding: 1rem;
-
-            font-size: 18px;
+            border-radius: 4px; /* Less rounded corners */
+            padding: 0.75rem; /* Reduce padding */
+            font-size: 1rem; /* Smaller input font */
+            border: 1px solid #ccc; /* Add border */
+            width: 100%; /* Make inputs full width */
+            box-sizing: border-box; /* Include padding in width */
         }
-
+    
+        input:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: #5bc0de; /* Change border color on focus */
+            box-shadow: 0 0 5px rgba(91, 192, 222, 0.5); /* Add focus shadow */
+        }
     </style>
 </head>
 <body>
