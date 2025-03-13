@@ -19,13 +19,21 @@
         font-size: 2.5em; /* Increase font size for better readability */
     }
 
+    .subtitle{
+        display: flex;
+        justify-content: flex-start;
+        margin: 20px auto;
+        padding-left: 1em;
+        font-size: 1.25em;
+    }
+
     /* Same as edit */
     .addContainer {
         display: flex;
         flex-direction: column;
-        width: 400px;
-        margin: 2rem auto;
-        padding: 2rem;
+        margin-inline: 1rem;
+        margin-bottom: 1em;
+        padding: 1rem;
         border: 1px solid #ccc;
         border-radius: 8px;
         background-color: #F9F9F9;
@@ -159,7 +167,7 @@
 </head>
 <body>
     <h1 class="title">Receipts</h1>
-    <h3>New Receipt</h3>
+    <h3 class="subtitle">New Receipt</h3>
     <form class="addContainer" action="/api/v1/?_method=POST" method="POST">
         <input type="hidden" name="_method" value="POST">
 
