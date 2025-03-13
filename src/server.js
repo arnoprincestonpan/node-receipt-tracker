@@ -102,7 +102,7 @@ app.post('/api/v1/', async (req, res, next) => {
             overallCost: parseFloat(overallCost),
         };
         receipts.push(newReceipt);
-        res.status(201).json(newReceipt); 
+        res.status(201).redirect('/'); 
     } catch (error) {
         next(error);
     }
