@@ -50,6 +50,23 @@ app.get('/api/v1/', async (req, res) => {
     res.json(receipts);
 });
 
+// READ (GET) Search
+app.get('/api/v1/search', async (req, res, next) => {
+    try {
+        const searchTerm = req.query.term ? req.query.term.toLowerCase() : "";
+        let filteredReceipts = receipts;
+        if(searchTerm){
+            filteredReceipts = receipts.filter(receipt =>
+                receipt.categories.some(category => category.toLowerCase().includes(searchTerm))
+            );
+        }
+
+        res.json(filteredReceipts);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Create (POST)
 app.post('/api/v1/', async (req, res, next) => {
     try {

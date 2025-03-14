@@ -207,7 +207,7 @@
             Search By Categories:
             <input id="searchReceipt" name="searchReceipt" placeholder="Enter your search term." value=""/>
         </label>
-        <button>Search</button>
+        <button id="searchButton">Search</button>
     </div>
     <div class="receiptsContainer" id="receiptsContainer">
         <!-- Code inside <script></script> -->
@@ -215,6 +215,7 @@
     <script>
         const receipts = <%- JSON.stringify(receipts) %>; // Get receipts from EJS
         const receiptsContainer = document.getElementById('receiptsContainer');
+        const searchButton = document.getElementById('searchButton');
 
         const renderReceipts = (receiptsToRender) => {
             receiptsContainer.innerHTML = ''; // Clear Initial - empty state
@@ -256,6 +257,23 @@
                 receiptsContainer.appendChild(cards);
             });
         }
+
+        const handleSearch = () => {
+            const searchTerm = document.getElementById('searchReceipt').value;
+
+            fetch(`/api/v1/search?term=${searchTerm}`)
+            .then(response => response.json())
+            .then(filteredReceipts => {
+                renderReceipts(filteredReceipts);
+            })
+            .catch(error => {
+                console.error("Error searching receipts:", error);
+                alert('An error occured while searching.');
+            })
+        }
+
+        searchButton.addEventListener("click", handleSearch);
+
         renderReceipts(receipts);
     </script>
 </body>
