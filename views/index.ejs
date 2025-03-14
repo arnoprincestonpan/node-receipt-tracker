@@ -281,11 +281,13 @@
             })
         }
 
-        searchButton.addEventListener("click", handleSearch);
-        clearButton.addEventListener('click', () => {
+        const clearSearch = () => {
             document.getElementById('searchReceipt').value = "";
-            handleSearch();
-        });
+            renderReceipts(receipts);
+        }
+
+        searchButton.addEventListener("click", handleSearch);
+        clearButton.addEventListener('click', clearSearch);
 
         renderReceipts(receipts);
     </script>
