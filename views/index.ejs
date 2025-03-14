@@ -203,10 +203,16 @@
         </button>
     </form>
     <div>
-        <label for="searchReceipt">
-            Search By Categories:
-            <input id="searchReceipt" name="searchReceipt" placeholder="Enter your search term." value=""/>
+        <label for="searchType">
+            Search By Type:
         </label>
+        <select id="searchType">
+            <option value="category" selected>Category</option>
+            <option value="name">Name</option>
+            <option value="date">Date</option>
+        </select>
+        <label for="searchReceipt">Search Term: </label>
+        <input id="searchReceipt" name="searchReceipt" placeholder="Enter your search term." value=""/>
         <button id="searchButton">Search</button>
         <button id="clearButton">Clear</button>
     </div>
@@ -261,9 +267,10 @@
         }
 
         const handleSearch = () => {
+            const searchType = document.getElementById('searchType').value;
             const searchTerm = document.getElementById('searchReceipt').value;
 
-            fetch(`/api/v1/search?term=${searchTerm}`)
+            fetch(`/api/v1/search?type=${searchType}&term=${encodeURIComponent(searchTerm)}`)
             .then(response => response.json())
             .then(filteredReceipts => {
                 renderReceipts(filteredReceipts);

@@ -54,11 +54,33 @@ app.get('/api/v1/', async (req, res) => {
 app.get('/api/v1/search', async (req, res, next) => {
     try {
         const searchTerm = req.query.term ? req.query.term.toLowerCase() : "";
+        const searchType = req.query.type;
+
         let filteredReceipts = receipts;
         if(searchTerm){
-            filteredReceipts = receipts.filter(receipt =>
-                receipt.categories.some(category => category.toLowerCase().includes(searchTerm))
-            );
+            switch(searchType){
+                case 'category':
+                    filteredReceipts = receipts.filter(receipt =>
+                        receipt.categories.some(category => category.toLowerCase().includes(searchTerm))
+                    );
+                    break;
+                case 'name':
+                    filteredReceipts = receipts.filter(receipt => 
+                        receipt.name.toLowerCase().includes(searchTerm));
+                    break;
+                case 'date':
+                    filteredReceipts = receipts.filter(receipt => {
+                        const searchDate = new Date(searchTerm).toDateString();
+                        const receiptDate = receipt.date.toDateString();
+                        return receiptDate === searchDate;
+                    });
+                    break;
+                default:
+                    // Search by Category is Default
+                    filteredReceipts = receipts.filter(receipt =>
+                        receipt.categories.some(category => category.toLowerCase().includes(searchTerm))
+                    );
+            };
         }
 
         res.json(filteredReceipts);
