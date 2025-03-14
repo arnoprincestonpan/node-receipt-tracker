@@ -208,6 +208,7 @@
             <input id="searchReceipt" name="searchReceipt" placeholder="Enter your search term." value=""/>
         </label>
         <button id="searchButton">Search</button>
+        <button id="clearButton">Clear</button>
     </div>
     <div class="receiptsContainer" id="receiptsContainer">
         <!-- Code inside <script></script> -->
@@ -216,6 +217,7 @@
         const receipts = <%- JSON.stringify(receipts) %>; // Get receipts from EJS
         const receiptsContainer = document.getElementById('receiptsContainer');
         const searchButton = document.getElementById('searchButton');
+        const clearButton = document.getElementById("clearButton");
 
         const renderReceipts = (receiptsToRender) => {
             receiptsContainer.innerHTML = ''; // Clear Initial - empty state
@@ -273,6 +275,10 @@
         }
 
         searchButton.addEventListener("click", handleSearch);
+        clearButton.addEventListener('click', () => {
+            document.getElementById('searchReceipt').value = "";
+            handleSearch();
+        });
 
         renderReceipts(receipts);
     </script>
