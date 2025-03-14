@@ -224,6 +224,7 @@
         const receiptsContainer = document.getElementById('receiptsContainer');
         const searchButton = document.getElementById('searchButton');
         const clearButton = document.getElementById("clearButton");
+        const searchTypeSelect = document.getElementById('searchType');
 
         const renderReceipts = (receiptsToRender) => {
             receiptsContainer.innerHTML = ''; // Clear Initial - empty state
@@ -286,8 +287,18 @@
             renderReceipts(receipts);
         }
 
+        const handleSelectChange = () => {
+            const selectedType = searchTypeSelect.value;
+            if (selectedType === "date"){
+                document.getElementById("searchReceipt").type = "date";
+            } else {
+                document.getElementById("searchReceipt").type = "text";
+            }
+        }
+
         searchButton.addEventListener("click", handleSearch);
         clearButton.addEventListener('click', clearSearch);
+        searchTypeSelect.addEventListener('change', handleSelectChange);
 
         renderReceipts(receipts);
     </script>
