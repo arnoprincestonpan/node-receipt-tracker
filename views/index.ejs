@@ -202,43 +202,61 @@
             <span class="front">Save</span>
         </button>
     </form>
-    <div class="receiptsContainer">
-        <% if (receipts && receipts.length > 0){ %>
-            <% receipts.forEach(receipt => {%>
-            <div class="cardContainer">
-                <h2><%= receipt.name %> | <%= receipt.date.toLocaleString() %></h2>
-                <h5><%= receipt.id %></h5>
-                <h3>Overall Cost: $<%= receipt.overallCost.toFixed(2); %></h3>
+    <div>
+        <label for="searchReceipt">
+            Search By Categories:
+            <input id="searchReceipt" name="searchReceipt" placeholder="Enter your search term." value=""/>
+        </label>
+        <button>Search</button>
+    </div>
+    <div class="receiptsContainer" id="receiptsContainer">
+        <!-- Code inside <script></script> -->
+    </div>
+    <script>
+        const receipts = <%- JSON.stringify(receipts) %>; // Get receipts from EJS
+        const receiptsContainer = document.getElementById('receiptsContainer');
+
+        const renderReceipts = (receiptsToRender) => {
+            receiptsContainer.innerHTML = ''; // Clear Initial - empty state
+            if(receiptsToRender.length === 0){
+                receiptsContainer.innerHTML = `
+                <p>No receipts available.</p>
+                <h2>Would you like to populate with sample data?</h2>
+                <form method="POST" action="/api/v1/sample?_method=POST">
+                    <input type="hidden" name="_method" value="POST">
+                    <button type="submit">Populate!</button>
+                </form>
+                `;
+                return;
+            }
+
+            receiptsToRender.forEach(receipt => {
+                const cards = document.createElement('div');
+                cards.classList.add('cardContainer');
+                cards.innerHTML = 
+                `
+                <h2>${receipt.name} | ${receipt.date.toLocaleString()}</h2>
+                <h5>${receipt.id}</h5>
+                <h3>Overall Cost: ${receipt.overallCost.toFixed(2)}</h3>
                 <h4>Categories:</h4>
                 <ul>
-                    <% if (receipt.categories && receipt.categories.length > 0){ %>
-                        <% receipt.categories.map(category => { %>
-                            <li><%= category %></li>
-                        <% }); %>
-                    <% } else { %>
-                        <li>No categories</li>
-                    <% } %>
+                    ${receipt.categories.map(category => `<li>${category}</li>`).join('')}
+                </ul>
                 </ul>
                 <div class="button-area">
-                    <form method="POST" action="/api/v1/<%= receipt.id %>?_method=DELETE">
+                    <form method="POST" action="/api/v1/${receipt.id}?_method=DELETE">
                         <input type="hidden" name="_method" value="DELETE"/>
                         <button type="submit">Delete</button>
                     </form>
-                    <!-- <a href="/edit/<%= receipt.id %>">Edit</a> -->
-                    <form action="/edit/<%= receipt.id %>">
+                    <form action="/edit/${receipt.id}">
                         <button type="submit">Edit</button>
                     </form>
                 </div>
-            </div>
-            <% }); %>
-        <% } else { %>
-            <p>No receipts available.</p>
-            <h2>Would you like to populate with sample data?</h2>
-            <form method="POST" action="/api/v1/sample?_method=POST">
-                <input type="hidden" name="_method" value="POST">
-                <button type="submit">Populate!</button>
-            </form>
-        <% } %>
-    </div>
+                `
+                receiptsContainer.appendChild(cards);
+            });
+        }
+        renderReceipts(receipts);
+    </script>
 </body>
 </html>
