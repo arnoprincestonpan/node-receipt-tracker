@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { v4 : uuidv4} = require('uuid');
 const methodOverride = require('method-override');
+const sampleReceipts = require('./data/sample-receipts.json');
 
 // let's use the package express()
 const app = express();
@@ -203,23 +204,7 @@ app.delete('/api/v1/:id', async (req, res, next) => {
 // Populate with Samples (POST)
 app.post('/api/v1/sample', async (req, res, next) => {
     try {    
-        receipts.push(
-                ...receipts,
-                {
-                    id: uuidv4(),
-                    name: "Groceries",
-                    date: new Date(),
-                    categories: ['food', 'snacks'],
-                    overallCost: 55.75
-                },
-                {
-                    id: uuidv4(),
-                    name: "Gas",
-                    date: new Date(),
-                    categories: ['transportation', 'energy'],
-                    overallCost: 40
-                },
-        );
+        receipts = [...sampleReceipts];
         res.status(201).redirect('/'); 
     } catch (error) {
         next(error);
