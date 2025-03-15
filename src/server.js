@@ -48,7 +48,23 @@ const receipts = [];
 
 // Read (GET)
 app.get('/api/v1/', async (req, res) => {
-    res.json(receipts);
+    try {
+        const page = parseInt(req.query.page) || 1; 
+        const limit = parseInt(req.query.limit) || 5; //default limit to 5 per page
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const paginatedReceipts = receipts.slice(startIndex, endIndex);
+
+        res.render('index', {
+            receipts: paginatedReceipts,
+            total: receipts.length,
+            page: page,
+            limit: limit
+        })
+    } catch (error){
+
+    }
 });
 
 // READ (GET) Search
