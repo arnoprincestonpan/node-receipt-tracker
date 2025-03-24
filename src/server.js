@@ -20,12 +20,13 @@ app.use(express.static('public')); // server static files from 'public' folder (
 
 // use View Engine
 const path = require('path'); // use path package from node.js
+const { listen } = require('express/lib/application');
 app.set('view engine', 'ejs'); // set view engine as ejs
 app.set('views', path.join(__dirname, "..", 'views')); // set directory views
 
 // create an array of Objects for receipts
 
-const receipts = [];
+let receipts = [];
 
 // const receipts = [
 //     {
