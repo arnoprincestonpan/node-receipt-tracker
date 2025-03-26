@@ -88,9 +88,18 @@ app.get('/api/v1/search', async (req, res, next) => {
                     break;
                 case 'date':
                     filteredReceipts = receipts.filter(receipt => {
-                        const searchDate = new Date(searchTerm).toDateString();
-                        const receiptDate = receipt.date.toDateString();
-                        return receiptDate === searchDate;
+                        const searchDate = new Date(searchTerm);
+                        if(isNaN(searchDate.getTime())){
+                            // checks for proper date submission
+                            return false;
+                        }
+                        const receiptDate = new Date(receipt.date);
+                        // Date.getDate() gets the actual Day of the Month
+                        return(
+                            receiptDate.getFullYear() === searchDate.getFullYear()
+                                && receiptDate.getMonth() === searchDate.getMonth()
+                                && receiptDate.getDate() === searchDate.getDate()
+                        )
                     });
                     break;
                 default:
