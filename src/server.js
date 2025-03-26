@@ -96,9 +96,9 @@ app.get('/api/v1/search', async (req, res, next) => {
                         const receiptDate = new Date(receipt.date);
                         // Date.getDate() gets the actual Day of the Month
                         return(
-                            receiptDate.getFullYear() === searchDate.getFullYear()
-                                && receiptDate.getMonth() === searchDate.getMonth()
-                                && receiptDate.getDate() === searchDate.getDate()
+                            receiptDate.getUTCFullYear() === searchDate.getUTCFullYear()
+                                && receiptDate.getUTCMonth() === searchDate.getUTCMonth()
+                                && receiptDate.getUTCDate() === searchDate.getUTCDate()
                         )
                     });
                     break;
